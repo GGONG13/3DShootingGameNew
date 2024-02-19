@@ -7,6 +7,8 @@ using Cursor = UnityEngine.Cursor;
 // 1인칭 슈팅 (First Person Shooter)
 public class FPSCamera : MonoBehaviour
 {
+
+
     /** 카메라 회전 **/
     // 목표: 마우스를 조작하면 카메라를 그 방향으로 회전시키고 싶다.
     // 필요 속성:

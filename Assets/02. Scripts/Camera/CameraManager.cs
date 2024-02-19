@@ -1,68 +1,92 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 public enum CameraMode
 {
+    Start,
     FPS,
     TPS,
     Top,
-    Bottom
+    Back,
 }
+
+// 역할: 카메라를 관리하는 관리자
 public class CameraManager : MonoBehaviour
 {
-
-
-
     public static CameraManager Instance { get; private set; }
-    public GameObject MainCamera;
-    public FPSCamera FPSCamera;
-    public TPSCamera TPSCamera;
 
-    public CameraMode Mode { get; set; }
+    private FPSCamera _FPSCamera;
+    private TPSCamera _TPSCamera;
 
+    public float RotationSpeed = 400;
 
-    /** 카메라 회전 **/
-    // 목표: 마우스를 조작하면 카메라를 캐릭터 중심에 따라 그 방향으로 회전시키고 싶다.
-    // 필요 속성:
-    // - 회전 속도
-    public float RotationSpeed = 200;
-    // - 누적할 x각도와 y각도
-    private float _mx = 0;
-    private float _my = 0;
+    public float X { get; private set; }
+    public float Y { get; private set; }
+
+    public Vector2 XY => new Vector2(X, Y);
+
+    public CameraMode Mode = CameraMode.Start;
 
     private void Awake()
     {
-        FPSCamera = MainCamera.GetComponent<FPSCamera>();
-        TPSCamera = MainCamera.GetComponent<TPSCamera>();
-
         if (Instance == null)
         {
             Instance = this;
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
 
-        SetCameraMode(CameraMode.FPS);
-       /* SetCamera(true);*/
+        _FPSCamera = GetComponent<FPSCamera>();
+        _TPSCamera = GetComponent<TPSCamera>();
     }
+
+    private void Start()
+    {
+        // 마우스 커서 없애고, 고정
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        SetCameraMode(CameraMode.FPS);
+    }
+
+    private void LateUpdate()
+    {
+        // 3. 마우스 입력을 받는다.
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        // 4. 마우스 입력에 따라 회전 방향을 누적한다.
+        X += mouseX * RotationSpeed * Time.deltaTime;
+        Y += mouseY * RotationSpeed * Time.deltaTime;
+
+        Y = Mathf.Clamp(Y, -90, 90);
+    }
+
     public void SetCameraMode(CameraMode mode)
     {
+        if (Mode == mode)
+        {
+            return;
+        }
+
+        if (Mode == CameraMode.FPS)
+        {
+            //Y += _TPSCamera.Offset.y;
+        }
+
+        Vector3 currentRotation = transform.eulerAngles;
+
         Mode = mode;
-/*        FPSCamera.enabled = (mode == CameraMode.FPS);*/
-    }
-    public void SetCamera(bool isFPS)
-    {
-        if (isFPS)
-        {
-            FPSCamera.enabled = true;
-            TPSCamera.enabled = false;
-        }
-        else 
-        {
-            TPSCamera.enabled = true;
-            FPSCamera.enabled = false;
-        }
+
+        //X = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
+        //Y = Mathf.Atan2(forward.y, Mathf.Sqrt(forward.x * forward.x + forward.z * forward.z)) * Mathf.Rad2Deg;
+
+
+        _FPSCamera.enabled = (mode == CameraMode.FPS);
+        _TPSCamera.enabled = (mode == CameraMode.TPS);
     }
 }

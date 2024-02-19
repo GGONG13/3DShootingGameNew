@@ -6,44 +6,33 @@ using UnityEngine;
 // 게임상의 캐릭터가 보는 시점이 아닌, 캐릭터를 보는 시점 즉, 3인칭 관찰자 시점의 카메라
 public class TPSCamera : MonoBehaviour
 {
-    /** 카메라 회전 **/
-    // 목표: 마우스를 조작하면 카메라를 캐릭터 중심에 따라 그 방향으로 회전시키고 싶다.
-    // 필요 속성:
-    // - 회전 속도
-    public float RotationSpeed = 200;
-    // - 타겟 (카메라)
     public Transform Target;
-    public Vector3 Offset = new Vector3(0, 3f, -6f);
-    // - 누적할 x각도와 y각도
-    private float _mx = 0;
-    private float _my = 0;
-    void LateUpdate()
+    public Vector3 Offset = new Vector3(0, 3f, -3f);
+
+    private void CalculateCameraAngles()
     {
-        // 구현 순서 :
-        // 1. 카메라를 타겟(플레이어에서 조금 떨어진 거리)으로 이동시킨다. (따라다니게 한다.)
-        transform.position = Target.position + Offset;
+        Vector3 targetToCameraVector = transform.position - Target.position;
 
-        // 2. 플레이어를 쳐다보게 한다.
-        // LookAt: 타겟의 현재 표지션을 받아 그 대상을 쳐다보게 하는 함수
-        if (CameraManager.Instance.Mode == CameraMode.TPS)
-        {
-            transform.LookAt(Target);
-        }
+        // 수평 회전 각도 x를 계산합니다.
+        float x = Mathf.Atan2(targetToCameraVector.x, targetToCameraVector.z) * Mathf.Rad2Deg;
 
-        // 3. 마우스 입력을 받는다.
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
-
-        // 4. 마우스 입력에 따라 회전 방향을 누적한다.
-        _mx += mouseX * RotationSpeed * Time.deltaTime;
-        _my += mouseY * RotationSpeed * Time.deltaTime;
-
-        // 5. 플레이어 중심으로 회전 방향에 맞게 회전한다.
-        if (CameraManager.Instance.Mode == CameraMode.TPS)
-        {
-            transform.RotateAround(Target.position, Vector3.up, _mx);
-            transform.RotateAround(Target.position, transform.right, _my);
-        }
-
+        // 수직 회전 각도 y를 계산합니다.
+        // 타겟으로부터 카메라까지의 벡터를 수평면에 투영한 후, 이와 카메라 방향 벡터 사이의 각도를 계산합니다.
+        float y = Mathf.Asin(targetToCameraVector.y / targetToCameraVector.magnitude) * Mathf.Rad2Deg;
     }
+
+    public float a;
+    private void LateUpdate()
+    {
+        transform.position = Target.position + Offset;
+        transform.LookAt(Target);
+
+        Vector2 xy = CameraManager.Instance.XY;
+        transform.RotateAround(Target.position, Vector3.up, xy.x);
+        transform.RotateAround(Target.position, transform.right, -xy.y);
+
+
+        transform.position = Target.position - transform.forward * Offset.magnitude + Vector3.up * (Offset.y - a);
+    }
+
 }
