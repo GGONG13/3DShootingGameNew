@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Monster : MonoBehaviour, iHitalbe
 {
@@ -19,7 +21,14 @@ public class Monster : MonoBehaviour, iHitalbe
     {
         Health -= damage;
         monsterUI();
+        if (Health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
+
+
+
 
     public void Init()
     {
