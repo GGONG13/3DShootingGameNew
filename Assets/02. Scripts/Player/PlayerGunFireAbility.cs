@@ -45,7 +45,7 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
     }
     void Update()
     {
-
+        RefreshGun();
         _CrrentTime += Time.deltaTime;
         _zoomTimer += Time.deltaTime;
         // 1. 만약에 마우스 왼쪽 버튼을 누른 상태 && 쿨타임이 다 지난 상태 && 총알 갯수 > 0
@@ -219,7 +219,7 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
         }
     }
 
-    private void RefreshGun()
+    public void RefreshGun()
     {
         foreach (Gun gun in guns) 
         {

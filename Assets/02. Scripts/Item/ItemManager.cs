@@ -13,13 +13,13 @@ public class ItemManager : MonoBehaviour
     public Text StaminaItemCountTextUI;
     public Text BulletItemCountTextUI;
 
-    public ItemManager Insntance { get; private set; }
+    public static ItemManager Instance { get; private set; }
 
     private void Awake()
     {
-        if (Insntance == null)
+        if (Instance == null)
         {
-            Insntance = this;
+            Instance = this;
         }
         else
         {
@@ -34,6 +34,7 @@ public class ItemManager : MonoBehaviour
         ItemList.Add(new Item(ItemType.Health, 1)); // 0 : Health
         ItemList.Add(new Item(ItemType.Stamina, 1)); // 1 : Stamina
         ItemList.Add(new Item(ItemType.Bullet, 1));  // 2 : Bullet  
+        RefreshUI();
     }
 
 
@@ -58,7 +59,7 @@ public class ItemManager : MonoBehaviour
         {
             if (ItemList[i].ItemType == itemType)
             {
-                return ItemList[i].Count++;
+                return ItemList[i].Count;
             }
         }
         return 0;
@@ -77,7 +78,7 @@ public class ItemManager : MonoBehaviour
         return false;
     }
 
-    private void RefreshUI()
+    public void RefreshUI()
     {
         HealthItemCountTextUI.text = $"x{GetItemCount(ItemType.Health)}";
         StaminaItemCountTextUI.text = $"x{GetItemCount(ItemType.Stamina)}";

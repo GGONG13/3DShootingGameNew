@@ -22,7 +22,6 @@ public class Item
         ItemType = itemType;
         Count = count;
     }
-
   
 
     public bool TryUse()
@@ -32,23 +31,28 @@ public class Item
             return false;
         }
         Count--;
-
         switch (ItemType)
         {
             case ItemType.Health:
             {
                 // Todo : 플레이어 체력 꽉차기
-
+                PlayerMoveAbility playerMoveAbility = GameObject.FindWithTag("Player").GetComponent<PlayerMoveAbility>();
+                playerMoveAbility.Health = playerMoveAbility.MaxHealth;
                 break;
             }
             case ItemType.Stamina:
             {
                 // Todo : 플레이어 스태미너 꽉차기
+                PlayerMoveAbility playerMoveAbility = GameObject.FindWithTag("Player").GetComponent<PlayerMoveAbility>();
+                playerMoveAbility.Stamina = PlayerMoveAbility.MaxStamina;
                 break;
             }
             case ItemType.Bullet:
             {
                 // Todo : 플레이어가 현재 들고 있는 총의 총알이 꽉찬다.
+                PlayerGunFireAbility playerGunFire = GameObject.FindWithTag("Player").GetComponent<PlayerGunFireAbility>();
+                playerGunFire.CurrentGun._bulletCount = playerGunFire.CurrentGun._bullet;
+                playerGunFire.RefreshGun();
                 break;
             }
         }
