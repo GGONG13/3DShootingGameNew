@@ -17,24 +17,26 @@ public class ItemObject : MonoBehaviour
         {
             if (itemType == ItemType.Health) 
             {
-                Destroy(gameObject);
                 ItemManager.Instance.AddItem(itemType);
                 ItemManager.Instance.RefreshUI();
                 Debug.Log(itemType);
+                this.gameObject.SetActive(false);
             }
             else if (itemType == ItemType.Stamina) 
             {
-                Destroy(gameObject);
                 ItemManager.Instance.AddItem(itemType);
                 ItemManager.Instance.RefreshUI();
                 Debug.Log(itemType);
+                Destroy(gameObject);
+                this.gameObject.SetActive(false);
             }
             else
             {
-                Destroy(gameObject);
                 ItemManager.Instance.AddItem(itemType);
                 ItemManager.Instance.RefreshUI();
                 Debug.Log(itemType);
+                Destroy(gameObject);
+                this.gameObject.SetActive(false);
             }
         }
     }

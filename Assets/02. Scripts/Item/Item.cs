@@ -11,13 +11,13 @@ public enum ItemType
     Stamina,
     Bullet
 }
-public class Item
+public class ItemObjectTypeFactory
 {
     public ItemType ItemType;
     public int Count;
 
 
-    public Item(ItemType itemType, int count)
+    public ItemObjectTypeFactory(ItemType itemType, int count)
     {
         ItemType = itemType;
         Count = count;

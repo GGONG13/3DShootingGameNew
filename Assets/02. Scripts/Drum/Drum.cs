@@ -31,7 +31,7 @@ public class Drum : MonoBehaviour, iHitalbe
             // rb.AddTorque(new Vector3(1, 10, 1) * explosionForce);
             GameObject drum = Instantiate(drumEffect);
             drum.transform.position = this.transform.position;
-
+            ItemObjectFactory.Instance.MakePercent(transform.position);
             Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRange, LayerMask.GetMask("Monster") | LayerMask.GetMask("Player"));
             foreach (Collider collider in colliders)
             {
@@ -54,6 +54,7 @@ public class Drum : MonoBehaviour, iHitalbe
             }
 
             StartCoroutine(DestroyDrum_Coroutine());
+
         }
     }
 
@@ -62,5 +63,6 @@ public class Drum : MonoBehaviour, iHitalbe
     {
         yield return new WaitForSeconds(3f);
         gameObject.SetActive(false);
+
     }
 }

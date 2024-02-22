@@ -38,6 +38,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
     public int MaxHealth = 100;
     public Slider PlayerSliderUI;
 
+
     // 목표: 캐릭터에 중력을 적용하고 싶다.
     // 필요 속성:
     // - 중력 값

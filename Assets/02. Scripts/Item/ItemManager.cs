@@ -27,13 +27,13 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public List<Item> ItemList = new List<Item>(); // 아이템 리스트
+    public List<ItemObjectTypeFactory> ItemList = new List<ItemObjectTypeFactory>(); // 아이템 리스트
 
     private void Start()
     {
-        ItemList.Add(new Item(ItemType.Health, 1)); // 0 : Health
-        ItemList.Add(new Item(ItemType.Stamina, 1)); // 1 : Stamina
-        ItemList.Add(new Item(ItemType.Bullet, 1));  // 2 : Bullet  
+        ItemList.Add(new ItemObjectTypeFactory(ItemType.Health, 1)); // 0 : Health
+        ItemList.Add(new ItemObjectTypeFactory(ItemType.Stamina, 1)); // 1 : Stamina
+        ItemList.Add(new ItemObjectTypeFactory(ItemType.Bullet, 1));  // 2 : Bullet  
         RefreshUI();
     }
 
@@ -72,7 +72,9 @@ public class ItemManager : MonoBehaviour
         {
             if (ItemList[i].ItemType == itemType)
             {
-                return ItemList[i].TryUse();
+                bool result = ItemList[i].TryUse();
+                RefreshUI();
+                return result;
             }
         }
         return false;
