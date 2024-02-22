@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Xml.Schema;
 using TMPro;
 using TMPro.EditorUtilities;
@@ -19,10 +20,11 @@ public enum MonsterState // 몬스터의 상태
     HitedDie                // 죽음
 }
 
+
 public class Monster : MonoBehaviour, iHitalbe
 {
     private MonsterState _CurrentState = MonsterState.Idle;
-
+    private ItemState _ItemState = ItemState.Idle;
     [Range(0f, 100f)]
     public int Health;
     public int MaxHealth = 100;
@@ -36,14 +38,24 @@ public class Monster : MonoBehaviour, iHitalbe
     private Vector3 _monsterPosition;
     private Vector3 _dir;
     public float FindDistance = 6;
-    public float AttactDistance = 1;
+    public float AttactDistance = 2.5f;
+    public float FollowDistance = 1f;
     public float moveSpeed = 10f;
     public float moveDistance = 40f;
+    public float _timer = 0;
+    float _attackTimer = 2f;
     private CharacterController _characterController;
+    private const float KNOCKBACK_Duration = 0.2f;
+    private float _knockbackProgress = 0f;
+    public float KnockbackPower = 1.5f;
+    private Vector3 _knockbackStartPosition;
+    private Vector3 _knockbackEndPosition;
 
     void Start()
     {
+        
         Init();
+        _ItemState = ItemState.Idle;
        _monsterPosition = transform.position;
         Target = GameObject.FindGameObjectWithTag("Player").transform;
        _characterController = GetComponent<CharacterController>();
@@ -53,10 +65,12 @@ public class Monster : MonoBehaviour, iHitalbe
     private void Update()
     {
         monsterUI();
+        
+        
         // 상태패턴 : 상태에 따라 행동을 다르게 하는 패턴
         // 1. 몬스터가 가질 수 있는 행동에 따라 상태를 나둔다
         // 2. 상태들이 조건에 따라 자연스럽게 전환(Transition)되게 설계한다.
-        switch(_CurrentState) 
+        switch (_CurrentState) 
         {
             case MonsterState.Idle:
                 Idle();
@@ -77,6 +91,7 @@ public class Monster : MonoBehaviour, iHitalbe
                 HitedDie();
                 break;
         }
+
     }
     private void Idle()
     {
@@ -102,10 +117,11 @@ public class Monster : MonoBehaviour, iHitalbe
         _characterController.Move(_dir * moveSpeed * Time.deltaTime);
       //   transform.position += _dir * moveSpeed * Time.deltaTime;
         transform.LookAt(Target);
-        Debug.Log("움직임?");
-        if (Vector3.Distance(Target.position, transform.position) < AttactDistance) 
+        Debug.Log("현재 상태 : Trace");
+        if (Vector3.Distance(Target.position, transform.position) > AttactDistance) 
         {
             _CurrentState = MonsterState.attack;
+            Debug.Log("상태 전환 : Trace => Attack");
         }
         if (Vector3.Distance(_monsterPosition, transform.position) > 20)
         {
@@ -114,10 +130,23 @@ public class Monster : MonoBehaviour, iHitalbe
     }
     private void Attack() 
     {
-        Debug.Log("상태 전환 : Trace => Attack");
-        if (Vector3.Distance(_monsterPosition, transform.position) > 20)
+        _timer += Time.deltaTime;
+        if (Vector3.Distance(Target.position, transform.position) > FollowDistance)
         {
-            _CurrentState = MonsterState.Return;
+            _CurrentState = MonsterState.Trace;
+            Debug.Log("상태 전환 : Attack => Trace");
+        }
+
+        if (_timer >= _attackTimer)
+        {
+            iHitalbe iHitalbe = Target.GetComponent<iHitalbe>();
+            int damage = 10;
+            if (iHitalbe != null)
+            {
+                Debug.Log("때렸다!");
+                iHitalbe.Hit(damage);
+                _timer = 0;
+            }
         }
     }
 
@@ -140,11 +169,28 @@ public class Monster : MonoBehaviour, iHitalbe
     }
     private void Damaged()
     {
+        // 1. Damaged 애니메이션 실행 (0.5초)
+        // todo : 애니메이션 실행
+        // 2. Lerp 이용해서 넉백 (0.5초)
+        // 2-1. 넉백 시작/최종 위치를 구한다.
+        if (_knockbackProgress == 0) 
+        {
+            _knockbackStartPosition = transform.position;
+            Vector3 dir = transform.position - Target.position;
+            dir.y = 0;
+            dir.Normalize();
+            _knockbackEndPosition = transform.position + dir * KnockbackPower;
+        }
+        _knockbackProgress += Time.deltaTime / KNOCKBACK_Duration;
+
+        // 2-2. Lerp를 이용해서 넉백하기
+        transform.position = Vector3.Lerp(_knockbackStartPosition, _knockbackEndPosition, _knockbackProgress);
         _CurrentState = MonsterState.Damage;
         Debug.Log("현재 상태 : Damage");
-        StartCoroutine(Damaged_coroutine());
-        if (Vector3.Distance(Target.position, transform.position) <= FindDistance)
+        // StartCoroutine(Damaged_coroutine());
+        if (_knockbackProgress > 1)
         {
+            _knockbackProgress = 0;
             Debug.Log("상태 전환 : Damage => Trace");
             _CurrentState = MonsterState.Trace;
         }
@@ -154,6 +200,9 @@ public class Monster : MonoBehaviour, iHitalbe
         
        
     }
+
+  
+
     public void Hit(int damage)
     {
         Health -= damage;

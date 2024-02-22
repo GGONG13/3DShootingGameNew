@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
 public class Drum : MonoBehaviour, iHitalbe
 {
     public int Health = 3;
@@ -11,6 +12,9 @@ public class Drum : MonoBehaviour, iHitalbe
     private float explosionForce = 30f;
     private int explosionRange = 5;
     private bool hasExploded = false;
+
+
+
     public void Hit(int damage)
     {
         if (hasExploded) return;

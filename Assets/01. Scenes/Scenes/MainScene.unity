@@ -266,8 +266,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!23 &32544716
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2524,8 +2527,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!23 &364526161
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3824,8 +3830,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!23 &637874712
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4073,8 +4082,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!23 &651832029
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5625,8 +5637,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!23 &918276045
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6264,8 +6279,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!23 &982059197
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9575,8 +9593,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!143 &1485203899
 CharacterController:
   m_ObjectHideFlags: 0
@@ -10834,8 +10855,11 @@ MonoBehaviour:
   Target: {fileID: 2050029250}
   FindDistance: 6
   AttactDistance: 1
+  FollowDistance: 1
   moveSpeed: 3
   moveDistance: 40
+  _timer: 0
+  KnockbackPower: 0.5
 --- !u!23 &1908594473
 MeshRenderer:
   m_ObjectHideFlags: 0

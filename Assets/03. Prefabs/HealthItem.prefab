@@ -119,3 +119,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 0
+  Target: {fileID: 0}
+  triggerDistant: 2
+  movingSpeed: 4

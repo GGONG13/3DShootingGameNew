@@ -17,12 +17,14 @@ public class ItemObjectTypeFactory
     public int Count;
 
 
+    
+
     public ItemObjectTypeFactory(ItemType itemType, int count)
     {
         ItemType = itemType;
         Count = count;
     }
-  
+
 
     public bool TryUse()
     {
