@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -98,7 +99,6 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
                                 {
                                     monster.Hit(damage);
                                 }*/
-
                 iHitalbe hitObject = hitInfo.collider.GetComponent<iHitalbe>();
                 if (hitObject != null) // 때릴 수 있는 친구인가?
                 {
@@ -112,10 +112,11 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
                 // 6. 이펙트가 쳐다보는 방향을 부딪힌 위치의 법선 벡터로 한다.
                 HitEffect.gameObject.transform.forward = hitInfo.normal;
                 HitEffect.Play(); // 쏠때마다 계속 재생될수 있도록 play를 달아줌
+
+             
                 if (CurrentGun._bulletCount == 0)
                 {
                     HitEffect.gameObject.SetActive(false);
-
                 }
                 BulletUI();
             }
@@ -147,6 +148,7 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
             CurrentGun = guns[2];
             BulletUI();
             SetZoomMode(false);
+
         }
 
 
@@ -203,7 +205,27 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
         }
         BulletUI();
         reloadText.enabled = false;
+    }
+    void HitGun() 
+    {
+        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+        // 3. 레이를 발사한다.
+        // 4. 레이가 부딪힌 대상의 정보를 받아온다.
+        RaycastHit hitInfo;
+        bool IsHit = Physics.Raycast(ray, out hitInfo);
+        iHitalbe hitObject = hitInfo.collider.GetComponent<iHitalbe>();
+        if (hitObject != null) // 때릴 수 있는 친구인가?
+        {
+            hitObject.Hit(CurrentGun.damage);
+        }
 
+        CurrentGun._bulletCount--;
+        CurrentGun._bulletCount = Mathf.Max(0, CurrentGun._bulletCount);
+        // 5. 부딪힌 위치에 (총알이 튀는) 이펙트를 위치한다. 
+        HitEffect.gameObject.transform.position = hitInfo.point;
+        // 6. 이펙트가 쳐다보는 방향을 부딪힌 위치의 법선 벡터로 한다.
+        HitEffect.gameObject.transform.forward = hitInfo.normal;
+        HitEffect.Play(); // 쏠때마다 계속 재생될수 있도록 play를 달아줌
     }
 
     void BulletUI()

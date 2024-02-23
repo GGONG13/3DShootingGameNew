@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3109900353690742243}
   - component: {fileID: 2121185693416775814}
   - component: {fileID: 2042338457668726757}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: HealthItem
   m_TagString: Items
   m_Icon: {fileID: 0}
@@ -120,5 +120,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 0
   Target: {fileID: 0}
-  triggerDistant: 2
-  movingSpeed: 4
+  triggerDistant: 3
+  movingSpeed: 1

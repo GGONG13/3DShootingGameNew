@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6010431416932201405}
   - component: {fileID: 2865911419233499734}
   - component: {fileID: 3177904762673000116}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BulletItem
   m_TagString: Items
   m_Icon: {fileID: 0}
@@ -120,5 +120,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 2
   Target: {fileID: 0}
-  triggerDistant: 2
-  movingSpeed: 4
+  triggerDistant: 3
+  movingSpeed: 1

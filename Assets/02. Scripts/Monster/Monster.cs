@@ -6,7 +6,9 @@ using TMPro;
 using TMPro.EditorUtilities;
 using Unity.VisualScripting;
 using Unity.VisualScripting.ReorderableList.Element_Adder_Menu;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
@@ -17,7 +19,8 @@ public enum MonsterState // 몬스터의 상태
     attack,            // 공격
     Return,            // 복귀
     Damage,            // 상처
-    HitedDie                // 죽음
+    HitedDie,          // 죽음
+    Browsing           // 순찰
 }
 
 
@@ -39,26 +42,35 @@ public class Monster : MonoBehaviour, iHitalbe
     private Vector3 _dir;
     public float FindDistance = 6;
     public float AttactDistance = 2.5f;
-    public float FollowDistance = 1f;
+    public float FollowDistance = 2f;
     public float moveSpeed = 10f;
     public float moveDistance = 40f;
     public float _timer = 0;
+
     float _attackTimer = 2f;
-    private CharacterController _characterController;
+    // private CharacterController _characterController;
+    private NavMeshAgent _navMeshAgent;
     private const float KNOCKBACK_Duration = 0.2f;
     private float _knockbackProgress = 0f;
     public float KnockbackPower = 1.5f;
     private Vector3 _knockbackStartPosition;
     private Vector3 _knockbackEndPosition;
 
+    public Transform BrowsingTarget;
+    public float _waitTime = 0;
+    private const float IDLE_DURATION = 3;
+    float _progress;
+    private bool _isMoving = true;
+
     void Start()
-    {
-        
+    {        
         Init();
         _ItemState = ItemState.Idle;
        _monsterPosition = transform.position;
         Target = GameObject.FindGameObjectWithTag("Player").transform;
-       _characterController = GetComponent<CharacterController>();
+      // _characterController = GetComponent<CharacterController>();
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.speed = moveSpeed;
     }
 
 
@@ -90,6 +102,9 @@ public class Monster : MonoBehaviour, iHitalbe
             case MonsterState.HitedDie:
                 HitedDie();
                 break;
+            case MonsterState.Browsing:
+                Browsing();
+                break;
         }
 
     }
@@ -97,14 +112,23 @@ public class Monster : MonoBehaviour, iHitalbe
     {
         // Idle 상태일때의 행동 코드 작성
         transform.LookAt(Target);
-
+        _waitTime += Time.deltaTime;
         // 몬스터의 아이들 애니메이션 재생
         // 플레이어와의 거리가 일정범위안이면
         if (Vector3.Distance(Target.position, transform.position) <= FindDistance)
         {
             Debug.Log("상태 전환 : Idle => Trace");
             _CurrentState = MonsterState.Trace;
+            _waitTime = 0;
         }
+
+        if (BrowsingTarget != null && _waitTime >= IDLE_DURATION) 
+        {
+            _waitTime = 0;
+            _CurrentState = MonsterState.Browsing;
+            Debug.Log("상태 전환 : Idle => Browsing");
+        }
+  
     }
     private void Trace()
     {
@@ -114,9 +138,16 @@ public class Monster : MonoBehaviour, iHitalbe
         _dir = Target.position - transform.position;
         _dir.y = 0;
         _dir.Normalize();
-        _characterController.Move(_dir * moveSpeed * Time.deltaTime);
-      //   transform.position += _dir * moveSpeed * Time.deltaTime;
-        transform.LookAt(Target);
+        // _characterController.Move(_dir * moveSpeed * Time.deltaTime);
+        //   transform.position += _dir * moveSpeed * Time.deltaTime;
+        //   transform.LookAt(Target);
+
+        // 네비게이션이 접근하는 최소 거리를 공격 가능한 거리로 설정
+        _navMeshAgent.stoppingDistance = AttactDistance;
+
+        // 네비게이션의 목적지를 플레이어의 위치로 한다. 지금까지 썼던 코드는 하위호완이라 주석처리
+        _navMeshAgent.destination = Target.position;
+
         Debug.Log("현재 상태 : Trace");
         if (Vector3.Distance(Target.position, transform.position) > AttactDistance) 
         {
@@ -155,13 +186,20 @@ public class Monster : MonoBehaviour, iHitalbe
         _dir = _monsterPosition - transform.position;
         _dir.y = 0;
         _dir.Normalize();
-        _characterController.Move(_dir * moveSpeed * Time.deltaTime);
-       // transform.LookAt(_monsterPosition);
-        
-        transform.forward = _dir;
+
+        // 네비게이션이 접근하는 최소 거리를 오차 범위로 설정
+         _navMeshAgent.stoppingDistance = 2;
+
+        // 네비게이션의 목적지를 원래의 몬스터의 위치로 한다. 지금까지 썼던 코드는 하위호완이라 주석처리
+        _navMeshAgent.destination = _monsterPosition;
+
+        //  _characterController.Move(_dir * moveSpeed * Time.deltaTime);
+        // transform.LookAt(_monsterPosition);
+
+        // transform.forward = _dir;
         Debug.Log("상태 전환 : Attack => Comeback");
 
-        if (Vector3.Distance(transform.position, _monsterPosition) < 1f)
+        if (Vector3.Distance(transform.position, _monsterPosition) <= 2)
         {
             _CurrentState = MonsterState.Idle;
             Debug.Log("상태 전환 : Comeback => Idle");
@@ -197,11 +235,28 @@ public class Monster : MonoBehaviour, iHitalbe
     }
     private void HitedDie() 
     {
-        
-       
+        _CurrentState = MonsterState.HitedDie;
+        Debug.Log("몬스터 죽음");
+
     }
 
-  
+    private void Browsing()
+    {
+        _navMeshAgent.stoppingDistance = 0;
+       // _navMeshAgent.destination = BrowsingTarget.position;
+        _navMeshAgent.SetDestination(BrowsingTarget.position);
+
+        if (Vector3.Distance(Target.position, transform.position) <= FindDistance)
+        {
+            Debug.Log("상태 전환 : Idle => Trace");
+            _CurrentState = MonsterState.Trace;
+        }
+        else if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= 0.2 && _navMeshAgent.remainingDistance != Mathf.Infinity)
+        {
+            _CurrentState = MonsterState.Return;
+            Debug.Log("상태 전환 : Browsing => Comeback");
+        }
+    }
 
     public void Hit(int damage)
     {
@@ -211,13 +266,13 @@ public class Monster : MonoBehaviour, iHitalbe
         if (Health <= 0)
         {
             Die();
-            _CurrentState = MonsterState.HitedDie;
-            // Destroy(gameObject);
+            HitedDie();
         }
     }
 
     public void Init()
     {
+        _waitTime = 0;
         Health = MaxHealth;
         monsterUI();
     }

@@ -4,6 +4,7 @@ using UnityEditor.Purchasing;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PlayerMoveAbility : MonoBehaviour, iHitalbe
 {
     // 목표: 키보드 방향키(wasd)를 누르면 캐릭터를 바라보는 방향 기준으로 이동시키고 싶다. 
@@ -62,9 +63,13 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
     // 2. [SpaceBar] 버튼을 누르고 있으면
     // 3. 벽을 타겠다.
 
+
+    public Image HitEffectImageUI;
+
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        HitEffectImageUI.enabled = false;
     }
 
     private void Start()
@@ -148,6 +153,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
         {
             // - 아니면 스태미나가 소모 되는 속도보다 빠른 속도로 충전된다 (2초)
             Stamina += StaminaChargeSpeed * Time.deltaTime; // 초당 50씩 충전
+
         }
 
         Stamina = Mathf.Clamp(Stamina, 0, 100);
@@ -156,6 +162,12 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
         // 땅이면 점프 횟수 초기화
         if (_characterController.isGrounded)
         {
+            if (_yVelocity < -10)
+            {
+                Hit(10 * (int)(_yVelocity / 10f));
+            }
+
+            PlayerHealthUI();
             _isJumping = false;
             _yVelocity = 0f;
             JumpRemainCount = JumpMaxCount;
@@ -186,16 +198,41 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
         //transform.position += speed * dir * Time.deltaTime;
         _characterController.Move(dir * speed * Time.deltaTime);
 
-        PlayerHealthUI();
+
 
     }
     public void Hit(int damage)
     {
         Health -= damage;
+        StartCoroutine(HitEffect_Coroutine(0.3f));
+        CameraManager.Instance.CameraShake.Shake();
         if (Health <= 0)
         {
+            HitEffectImageUI.enabled = true;
            // Destroy(gameObject);
         }
+    }
+
+    IEnumerator ShakingCamera_Coroutine()
+    {
+        Vector3 cameraOrigin = Camera.main.transform.position;
+        float x = Random.Range(-5f, 5f) * 0.2f;
+        Vector3 shakeCamera = cameraOrigin + new Vector3(x, x, 0);
+
+
+
+        Camera.main.transform.position = shakeCamera;
+        Debug.Log("카메라 흔들");
+        yield return new WaitForSeconds(30f);
+        Camera.main.transform.position = cameraOrigin;
+        Debug.Log("카메라 원래대로");
+    }
+
+    IEnumerator HitEffect_Coroutine(float delay)
+    {
+        HitEffectImageUI.enabled = true;
+        yield return new WaitForSeconds(0.2f);
+        HitEffectImageUI.enabled = false;
     }
 
     private void PlayerHealthUI()

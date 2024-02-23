@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,11 @@ public class Gun : MonoBehaviour
     // ¹ß»ç ÄðÅ¸ÀÓ
     public float _CoolTime = 0.5f;
 
+    public ParticleSystem RifleEffect;
+    public ParticleSystem SniperEffect;
+    public ParticleSystem PistolEffect;
+
+
 
     // ÃÑ¾Ë °¹¼ö
     public int _bulletMax = 300;
@@ -44,5 +50,29 @@ public class Gun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    public void GunEffect(GunType GType)
+    {
+        switch (GType) 
+        {
+            case GunType.Rifle:
+                PlayEffect(RifleEffect);
+                break;
+            case GunType.Sniper:
+                PlayEffect(SniperEffect);
+                break;
+            case GunType.Pistol:
+                PlayEffect(PistolEffect);
+                break;
+        }
+    }
+    void PlayEffect(ParticleSystem effect)
+    {
+        if (effect != null)
+        {
+            effect.Play(); // ÇØ´ç ÀÌÆåÆ® Àç»ý
+        }
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3031006720111349546}
   - component: {fileID: 1227016528119117698}
   - component: {fileID: 6849691749753280498}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: StaminaItem
   m_TagString: Items
   m_Icon: {fileID: 0}
@@ -120,5 +120,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   Target: {fileID: 0}
-  triggerDistant: 2
-  movingSpeed: 4
+  triggerDistant: 3
+  movingSpeed: 1
