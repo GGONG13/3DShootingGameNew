@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System;
 
 
 // 역할 : 아이템들을 관리해주는 관리자
@@ -12,7 +13,16 @@ using UnityEngine.UI;
 public class ItemManager : MonoBehaviour
 {
 
-    public UnityEvent OnDataChanged;
+    public Action OnDataChanged;
+
+    public void Mulity(Action action)
+    {
+        if (OnDataChanged != null)
+        {
+            OnDataChanged += action;
+        }
+    }
+
     // 관찰자(유튜버) 패턴
     // 구독자가 구독하고 있는 유튜버의 상태가 변화할 때마다
     // 유튜버는 구독자에게 이벤트를 통지하고, 
@@ -44,6 +54,7 @@ public class ItemManager : MonoBehaviour
         {
             OnDataChanged.Invoke();
         }
+
     }
 
 
