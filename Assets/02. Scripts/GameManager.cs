@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
 {
     // 게임의 상태는 처음에 "준비" 상태
     public GameState State { get; private set; } = GameState.Ready;
-    public Text StateTextUI;
+    public TextMeshProUGUI StateTextUI;
     //    public Color StateColor; 이런식으로 외부에서 텍스트에 색을 따로 입힐수도 있음
 
     // 게임 상태
@@ -70,18 +71,17 @@ public class GameManager : MonoBehaviour
             case GameState.Ready:
             StateTextUI.text = "Ready...";
             StateTextUI.color = Color.white;
-            StateTextUI.fontSize = 200;
+            StateTextUI.fontSize = 140;
                 break;
             case GameState.Start:
-            StateTextUI.text = "게임 시작!";
+            StateTextUI.text = "게임 시작";
             StateTextUI.color = new Color(1f, 0.5506037f, 0f, 1f);
-            StateTextUI.fontStyle = FontStyle.Bold;
+            StateTextUI.fontStyle = FontStyles.Normal;
             StateTextUI.fontSize = 120;
                 break;
             case GameState.Over:
             StateTextUI.text = "GameOver";
             StateTextUI.color = Color.cyan;
-            StateTextUI.fontStyle = FontStyle.Normal;
             StateTextUI.fontSize = 140;
                 break;
         }

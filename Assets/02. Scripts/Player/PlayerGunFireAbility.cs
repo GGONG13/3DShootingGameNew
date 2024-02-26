@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEditor.ShortcutManagement;
@@ -30,9 +31,9 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
     public UnityEngine.UI.Image ZoomImage;
     public UnityEngine.UI.Image hairImage;
 
-    public Text bulletText;
-    public Text reloadText;
-
+    public TextMeshProUGUI bulletText;
+    public TextMeshProUGUI reloadText;
+    
     private void Start()
     {
         CurrentGun = guns[0];

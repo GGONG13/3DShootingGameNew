@@ -89,7 +89,7 @@ public class ItemObject : MonoBehaviour
             yield return null;
         }
         ItemManager.Instance.AddItem(itemType);
-        ItemManager.Instance.RefreshUI();
+       // ItemManager.Instance.RefreshUI();
         Debug.Log(itemType + "아이템이 추가되었습니다.");
         this.gameObject.SetActive(false);
 

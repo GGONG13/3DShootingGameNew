@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +23,7 @@ public class PlayerBombFireAbility : MonoBehaviour
     public int Bombmax = 10;
     public int CurrentBomb;
 
-    public Text text;
+    public TextMeshProUGUI text;
 
 
     private void Start()
