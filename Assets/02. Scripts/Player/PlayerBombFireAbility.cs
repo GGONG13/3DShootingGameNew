@@ -43,8 +43,9 @@ public class PlayerBombFireAbility : MonoBehaviour
     {
         // 수류탄 투척**
         // 구현 순서 :
-        // 1. 마우스 오른쪽 버튼을 감지
-        if (Input.GetMouseButtonDown(1) && CurrentBomb > 0)
+        // 1. 마우스 오른쪽 버튼을 감지    
+        
+            if (Input.GetMouseButtonDown(1) && CurrentBomb > 0 && GameManager.Instance.State == GameState.Start)
         {
             CurrentBomb--;
             // 2. 수류탄 던지는 위치에다가 수류탄 생성

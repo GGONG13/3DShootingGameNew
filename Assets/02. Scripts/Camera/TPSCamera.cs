@@ -24,15 +24,18 @@ public class TPSCamera : MonoBehaviour
     public float a;
     private void LateUpdate()
     {
-        transform.localPosition = Target.position + Offset;
-        transform.LookAt(Target);
+        if (GameManager.Instance.State == GameState.Start)
+        {
+            transform.localPosition = Target.position + Offset;
+            transform.LookAt(Target);
 
-        Vector2 xy = CameraManager.Instance.XY;
-        transform.RotateAround(Target.position, Vector3.up, xy.x);
-        transform.RotateAround(Target.position, transform.right, -xy.y);
+            Vector2 xy = CameraManager.Instance.XY;
+            transform.RotateAround(Target.position, Vector3.up, xy.x);
+            transform.RotateAround(Target.position, transform.right, -xy.y);
 
 
-        transform.localPosition = Target.position - transform.forward * Offset.magnitude + Vector3.up * (Offset.y - a);
+            transform.localPosition = Target.position - transform.forward * Offset.magnitude + Vector3.up * (Offset.y - a);
+        }
     }
 
 }

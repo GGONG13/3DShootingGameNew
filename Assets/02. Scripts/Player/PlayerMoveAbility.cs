@@ -39,6 +39,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
     public int MaxHealth = 100;
     public Slider PlayerSliderUI;
 
+    public float speed;
 
     // 목표: 캐릭터에 중력을 적용하고 싶다.
     // 필요 속성:
@@ -62,7 +63,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
     // 1. 만약에 벽에 닿아 있는데
     // 2. [SpaceBar] 버튼을 누르고 있으면
     // 3. 벽을 타겠다.
-
+   
 
     public Image HitEffectImageUI;
 
@@ -124,15 +125,31 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
             // TPS 카메라 모드로 전환
             CameraManager.Instance.SetCameraMode(CameraMode.TPS);
         }
-        // 1. 키 입력 받기
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        if (GameManager.Instance.State == GameState.Start)
+        {            // 1. 키 입력 받기
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
 
-        // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
-        Vector3 dir = new Vector3(h, 0, v);             // 로컬 좌표꼐 (나만의 동서남북) 
-        dir.Normalize();
-        // Transforms direction from local space to world space.
-        dir = Camera.main.transform.TransformDirection(dir); // 글로벌 좌표계 (세상의 동서남북)
+            // 2. '캐릭터가 바라보는 방향'을 기준으로 방향구하기
+            Vector3 dir = new Vector3(h, 0, v);             // 로컬 좌표꼐 (나만의 동서남북) 
+            dir.Normalize();
+            // Transforms direction from local space to world space.
+            dir = Camera.main.transform.TransformDirection(dir); // 글로벌 좌표계 (세상의 동서남북)
+
+            // 3-1. 중력 적용
+            // 1. 중력 가속도가 누적된다.
+            _yVelocity += _gravity * Time.deltaTime;
+
+            // 2. 플레이어에게 y축에 있어 중력을 적용한다.
+
+            dir.y = _yVelocity;
+
+            // 3-2. 이동하기
+            //transform.position += speed * dir * Time.deltaTime;
+            _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+
+
+        }
 
         // 실습 과제 1. Shift 누르고 있으면 빨리 뛰기
         float speed = MoveSpeed; // 5
@@ -146,7 +163,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
             {
                 speed = RunSpeed;
             }
-          
+
 
         }
         else if ((_characterController.isGrounded))
@@ -186,19 +203,6 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
         }
 
 
-        // 3-1. 중력 적용
-        // 1. 중력 가속도가 누적된다.
-        _yVelocity += _gravity * Time.deltaTime;
-
-        // 2. 플레이어에게 y축에 있어 중력을 적용한다.
-
-        dir.y = _yVelocity;
-
-        // 3-2. 이동하기
-        //transform.position += speed * dir * Time.deltaTime;
-        _characterController.Move(dir * speed * Time.deltaTime);
-
-
 
     }
     public void Hit(int damage)
@@ -208,8 +212,9 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
         CameraManager.Instance.CameraShake.Shake();
         if (Health <= 0)
         {
+            GameManager.Instance.GameOver();
             HitEffectImageUI.enabled = true;
-           // Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 

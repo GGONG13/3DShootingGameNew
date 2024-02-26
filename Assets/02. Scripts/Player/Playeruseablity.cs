@@ -8,6 +8,11 @@ public class Playeruseablity : MonoBehaviour
 
     private void Update()
     {
+
+        if (GameManager.Instance.State != GameState.Start)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.T))
         {
             bool result = ItemManager.Instance.TryUseItem(ItemType.Health);
