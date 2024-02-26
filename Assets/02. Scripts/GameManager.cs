@@ -68,12 +68,12 @@ public class GameManager : MonoBehaviour
         switch(State)
         {
             case GameState.Ready:
-            StateTextUI.text = "Ready";
+            StateTextUI.text = "Ready...";
             StateTextUI.color = Color.white;
             StateTextUI.fontSize = 200;
                 break;
             case GameState.Start:
-            StateTextUI.text = "Go!";
+            StateTextUI.text = "게임 시작!";
             StateTextUI.color = new Color(1f, 0.5506037f, 0f, 1f);
             StateTextUI.fontStyle = FontStyle.Bold;
             StateTextUI.fontSize = 120;

@@ -650,9 +650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bc7c2bad5c17a6478153a2979a31adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  State: 0
   StateTextUI: {fileID: 1565149194}
-  Player: {fileID: 2050029252}
 --- !u!1 &187236272
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,9 +1610,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: e5bcb29f6fa124b4bbb3cd958aad8daf, type: 3}
+    m_Font: {fileID: 12800000, guid: 670c4c88c216ada4ba56c13cbfe9189f, type: 3}
     m_FontSize: 27
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 299
@@ -4032,15 +4030,15 @@ RectTransform:
   m_GameObject: {fileID: 1125702082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 312040639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -54}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -15.000189}
+  m_SizeDelta: {x: 0, y: -29.999624}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1125702084
 MonoBehaviour:
@@ -4064,10 +4062,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e5bcb29f6fa124b4bbb3cd958aad8daf, type: 3}
-    m_FontSize: 27
+    m_FontSize: 50
     m_FontStyle: 3
-    m_BestFit: 1
-    m_MinSize: 27
+    m_BestFit: 0
+    m_MinSize: 0
     m_MaxSize: 300
     m_Alignment: 1
     m_AlignByGeometry: 1
@@ -4580,9 +4578,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: e5bcb29f6fa124b4bbb3cd958aad8daf, type: 3}
+    m_Font: {fileID: 12800000, guid: 670c4c88c216ada4ba56c13cbfe9189f, type: 3}
     m_FontSize: 26
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 0
     m_MaxSize: 300
@@ -5610,7 +5608,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: e5bcb29f6fa124b4bbb3cd958aad8daf, type: 3}
+    m_Font: {fileID: 12800000, guid: 9f4dbfbfa429d954d99d7111235da814, type: 3}
     m_FontSize: 120
     m_FontStyle: 3
     m_BestFit: 0
@@ -7344,6 +7342,7 @@ MonoBehaviour:
   Health: 0
   MaxHealth: 100
   PlayerSliderUI: {fileID: 865529915}
+  speed: 0
   _yVelocity: 0
   ClimingPower: 7
   ClimingStaminaCosumeFactor: 1.5
