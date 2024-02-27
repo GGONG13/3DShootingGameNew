@@ -50,6 +50,8 @@ public class Monster : MonoBehaviour, iHitalbe
     float _attackTimer = 2f;
     // private CharacterController _characterController;
     private NavMeshAgent _navMeshAgent;
+    private Animator _animator;
+
     private const float KNOCKBACK_Duration = 0.2f;
     private float _knockbackProgress = 0f;
     public float KnockbackPower = 1.5f;
@@ -71,6 +73,8 @@ public class Monster : MonoBehaviour, iHitalbe
       // _characterController = GetComponent<CharacterController>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _navMeshAgent.speed = moveSpeed;
+        _animator = GetComponentInChildren<Animator>(); 
+        // 현재 몬스터에 애니메이터가 달려있지 않기 때문에 자식안에서 찾아야함
     }
 
 
@@ -119,6 +123,7 @@ public class Monster : MonoBehaviour, iHitalbe
         {
             Debug.Log("상태 전환 : Idle => Trace");
             _CurrentState = MonsterState.Trace;
+            _animator.SetTrigger("IdleToTrace");
             _waitTime = 0;
         }
 
@@ -127,6 +132,7 @@ public class Monster : MonoBehaviour, iHitalbe
             _waitTime = 0;
             _CurrentState = MonsterState.Browsing;
             Debug.Log("상태 전환 : Idle => Browsing");
+            _animator.SetTrigger("IdleToBrowsing");
         }
   
     }
@@ -153,10 +159,12 @@ public class Monster : MonoBehaviour, iHitalbe
         {
             _CurrentState = MonsterState.attack;
             Debug.Log("상태 전환 : Trace => Attack");
+            _animator.SetTrigger("TraceToAttack");
         }
         if (Vector3.Distance(_monsterPosition, transform.position) > 20)
         {
             _CurrentState = MonsterState.Return;
+            _animator.SetTrigger("TraceToComeBack");
         }
     }
     private void Attack() 
@@ -166,18 +174,25 @@ public class Monster : MonoBehaviour, iHitalbe
         {
             _CurrentState = MonsterState.Trace;
             Debug.Log("상태 전환 : Attack => Trace");
+            _animator.SetTrigger("AttacToTrace");
         }
 
         if (_timer >= _attackTimer)
         {
-            iHitalbe iHitalbe = Target.GetComponent<iHitalbe>();
-            int damage = 10;
-            if (iHitalbe != null)
-            {
-                Debug.Log("때렸다!");
-                iHitalbe.Hit(damage);
-                _timer = 0;
-            }
+            PlayerAttack();
+        }
+    }
+
+    public void PlayerAttack()
+    {
+        iHitalbe iHitalbe = Target.GetComponent<iHitalbe>();
+        int damage = 10;
+        if (iHitalbe != null)
+        {
+            Debug.Log("때렸다!");
+            _animator.SetTrigger("Attack");
+            iHitalbe.Hit(damage);
+            _timer = 0;
         }
     }
 
@@ -198,10 +213,12 @@ public class Monster : MonoBehaviour, iHitalbe
 
         // transform.forward = _dir;
         Debug.Log("상태 전환 : Attack => Comeback");
+        _animator.SetTrigger("AttacToComeBack");
 
         if (Vector3.Distance(transform.position, _monsterPosition) <= 2)
         {
             _CurrentState = MonsterState.Idle;
+            _animator.SetTrigger("ComeBackToIdle");
             Debug.Log("상태 전환 : Comeback => Idle");
         }
     }
@@ -225,11 +242,13 @@ public class Monster : MonoBehaviour, iHitalbe
         transform.position = Vector3.Lerp(_knockbackStartPosition, _knockbackEndPosition, _knockbackProgress);
         _CurrentState = MonsterState.Damage;
         Debug.Log("현재 상태 : Damage");
+        _animator.SetTrigger("Damaged");
         // StartCoroutine(Damaged_coroutine());
         if (_knockbackProgress > 1)
         {
             _knockbackProgress = 0;
             Debug.Log("상태 전환 : Damage => Trace");
+            _animator.SetTrigger("DamagedToTrace");
             _CurrentState = MonsterState.Trace;
         }
     }
@@ -237,7 +256,6 @@ public class Monster : MonoBehaviour, iHitalbe
     {
         _CurrentState = MonsterState.HitedDie;
         Debug.Log("몬스터 죽음");
-
     }
 
     private void Browsing()
@@ -249,12 +267,14 @@ public class Monster : MonoBehaviour, iHitalbe
         if (Vector3.Distance(Target.position, transform.position) <= FindDistance)
         {
             Debug.Log("상태 전환 : Idle => Trace");
+            _animator.SetTrigger("IdleToTrace");
             _CurrentState = MonsterState.Trace;
         }
         else if (!_navMeshAgent.pathPending && _navMeshAgent.remainingDistance <= 0.2 && _navMeshAgent.remainingDistance != Mathf.Infinity)
         {
             _CurrentState = MonsterState.Return;
             Debug.Log("상태 전환 : Browsing => Comeback");
+            _animator.SetTrigger("BrowsingToComeBack");
         }
     }
 
@@ -265,7 +285,7 @@ public class Monster : MonoBehaviour, iHitalbe
         monsterUI();
         if (Health <= 0)
         {
-            Die();
+            StartCoroutine(DieAnim());
             HitedDie();
         }
     }
@@ -343,6 +363,18 @@ public class Monster : MonoBehaviour, iHitalbe
         }*/
     }
 
+    private IEnumerator DieAnim() 
+    {
+        _animator.SetTrigger("Die");
+        yield return new WaitForSeconds(1f);
+        if (null != _animator)
+        {
+            this.gameObject.SetActive(false);
+            ItemObjectFactory.Instance.MakePercent(transform.position);
+        }
+        yield return null;
+
+    }
     private IEnumerator Damaged_coroutine()
     {
         yield return new WaitForSeconds(1f);

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEditor.Purchasing;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
     public Slider StaminaSliderUI;
 
     private CharacterController _characterController;
+    private Animator _animator;
 
     // 목표: 스페이스바를 누르면 캐릭터를 점프하고 싶다.
     // 필요 속성:
@@ -71,6 +73,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
     {
         _characterController = GetComponent<CharacterController>();
         HitEffectImageUI.enabled = false;
+        _animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -147,7 +150,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
             // 3-2. 이동하기
             //transform.position += speed * dir * Time.deltaTime;
             _characterController.Move(dir * MoveSpeed * Time.deltaTime);
-
+            _animator.SetFloat("Move", dir.magnitude);
 
         }
 
