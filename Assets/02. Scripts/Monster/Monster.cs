@@ -193,6 +193,7 @@ public class Monster : MonoBehaviour, iHitalbe
             _animator.SetTrigger("Attack");
             iHitalbe.Hit(damage);
             _timer = 0;
+
         }
     }
 

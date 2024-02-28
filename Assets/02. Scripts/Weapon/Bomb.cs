@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor.Purchasing;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour, iHitalbe
+public class Bomb : MonoBehaviour
 {
 
     // 플레이어를 제외하고 물체에 닿으면 자기 자신을 사라지게 하는 코드 작성
@@ -55,13 +55,11 @@ public class Bomb : MonoBehaviour, iHitalbe
                 hitalbe.Hit(Damage);
             }
         }
+
+
+
+
     }
-    public void Hit(int damage)
-    {
-        Health -= damage;
-        if (Health <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
+
 }
+

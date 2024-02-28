@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.PackageManager;
+using UnityEditor.Purchasing;
 using UnityEditor.ShortcutManagement;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
     public int CurrentGunIndex;
 
     public ParticleSystem HitEffect;
+
+    private Animator _animator;
 
     private const int DefaltFOV = 60;
     private const int ZoomFOV = 15;
@@ -33,7 +36,9 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
 
     public TextMeshProUGUI bulletText;
     public TextMeshProUGUI reloadText;
-    
+
+    public GameObject[] muzzle;
+    //   public List<GameObject> muzzleList; 이렇게 꺼도 됨
     private void Start()
     {
         CurrentGun = guns[0];
@@ -44,6 +49,15 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
         ZoomImage.gameObject.SetActive(false);
         Camera.main.fieldOfView = DefaltFOV;
         // _reloadCoroutine = StartCoroutine(ReloadBullet(0));
+        _animator = GetComponentInChildren<Animator>();
+        for (int i = 0; i < muzzle.Length; i++)
+        {
+            muzzle[i].SetActive(false);
+        }
+/*        foreach (GameObject go in muzzle) 
+        {
+            go.SetActive(false);
+        } 이렇게 해도 됨 */
     }
     void Update()
     {
@@ -87,6 +101,7 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
                     reloadText.enabled = false;
                 }
 
+                _animator.SetTrigger("Shot");
 
                 // 2. 레이(광선)을 생성하고, 위치와 방향을 설정한다.
                 Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
@@ -110,6 +125,7 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
 
                     CurrentGun._bulletCount--;
                     CurrentGun._bulletCount = Mathf.Max(0, CurrentGun._bulletCount);
+                    StartCoroutine(Muzzel_Coroutine());
                     // 5. 부딪힌 위치에 (총알이 튀는) 이펙트를 위치한다. 
                     HitEffect.gameObject.transform.position = hitInfo.point;
                     // 6. 이펙트가 쳐다보는 방향을 부딪힌 위치의 법선 벡터로 한다.
@@ -280,4 +296,11 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
         RefreshGun();
     }
 
+    public IEnumerator Muzzel_Coroutine() 
+    {
+        int random = UnityEngine.Random.Range(0, muzzle.Length);
+        muzzle[random].SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        muzzle[random].SetActive(false);
+    }
 }

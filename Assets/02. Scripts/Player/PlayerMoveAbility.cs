@@ -45,7 +45,8 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
 
     // 목표: 캐릭터에 중력을 적용하고 싶다.
     // 필요 속성:
-    // - 중력 값
+
+
     private float _gravity = -20;
     // - 누적할 중력 변수: y축 속도
     public float _yVelocity = 0f;

@@ -9,7 +9,7 @@ public class TPSCamera : MonoBehaviour
     public Transform Target;
     public Vector3 Offset = new Vector3(0, 3f, -3f);
 
-    private void CalculateCameraAngles()
+/*    private void CalculateCameraAngles()
     {
         Vector3 targetToCameraVector = transform.position - Target.position;
 
@@ -19,23 +19,24 @@ public class TPSCamera : MonoBehaviour
         // 수직 회전 각도 y를 계산합니다.
         // 타겟으로부터 카메라까지의 벡터를 수평면에 투영한 후, 이와 카메라 방향 벡터 사이의 각도를 계산합니다.
         float y = Mathf.Asin(targetToCameraVector.y / targetToCameraVector.magnitude) * Mathf.Rad2Deg;
-    }
+    }*/
 
     public float a;
     private void LateUpdate()
     {
-        if (GameManager.Instance.State == GameState.Start)
+        if (GameManager.Instance.State != GameState.Start)
         {
-            transform.localPosition = Target.position + Offset;
-            transform.LookAt(Target);
-
-            Vector2 xy = CameraManager.Instance.XY;
-            transform.RotateAround(Target.position, Vector3.up, xy.x);
-            transform.RotateAround(Target.position, transform.right, -xy.y);
-
-
-            transform.localPosition = Target.position - transform.forward * Offset.magnitude + Vector3.up * (Offset.y - a);
+            return;
         }
+        transform.localPosition = Target.position + Offset;
+        transform.LookAt(Target);
+
+        Vector2 xy = CameraManager.Instance.XY;
+        transform.RotateAround(Target.position, Vector3.up, xy.x);
+        transform.RotateAround(Target.position, transform.right, -xy.y);
+
+
+        transform.localPosition = Target.position - transform.forward * Offset.magnitude + Vector3.up * (Offset.y - a);
     }
 
 }
