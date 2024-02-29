@@ -50,9 +50,10 @@ public class Bomb : MonoBehaviour
         {
             Collider collider = _colliders[i];
             iHitalbe hitalbe = collider.GetComponent<iHitalbe>();
+            DamageInfo damageInfo = new DamageInfo(DamageType.Normal, Damage);
             if (hitalbe != null )
             {
-                hitalbe.Hit(Damage);
+                hitalbe.Hit(damageInfo);
             }
         }
 

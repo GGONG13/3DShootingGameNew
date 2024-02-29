@@ -23,6 +23,4 @@ public class UI_ItemIventory : MonoBehaviour
         StaminaItemCountTextUI.text = $"x{ItemManager.Instance.GetItemCount(ItemType.Stamina)}";
         BulletItemCountTextUI.text = $"x{ItemManager.Instance.GetItemCount(ItemType.Bullet)}";
     }
-
-  
 }

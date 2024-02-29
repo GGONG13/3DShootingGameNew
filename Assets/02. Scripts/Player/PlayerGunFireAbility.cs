@@ -118,9 +118,21 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
                                         monster.Hit(damage);
                                     }*/
                     iHitalbe hitObject = hitInfo.collider.GetComponent<iHitalbe>();
+                    
                     if (hitObject != null) // 때릴 수 있는 친구인가?
                     {
-                        hitObject.Hit(CurrentGun.damage);
+                        DamageInfo damage = new DamageInfo(DamageType.Normal, CurrentGun.damage);
+                        damage.Position = hitInfo.point;
+                        damage.Normal = hitInfo.normal;
+
+                        if (UnityEngine.Random.Range(0, 2) == 0) 
+                        {
+                            Debug.Log("크리티컬!");
+                            damage.DamageType = DamageType.Cirtical;
+                            damage.Amount *= 2; 
+                        }
+
+                        hitObject.Hit(damage);
                     }
 
                     CurrentGun._bulletCount--;
@@ -226,35 +238,15 @@ public class PlayerGunFireAbility : MonoBehaviour, iHitalbe
         BulletUI();
         reloadText.enabled = false;
     }
-    void HitGun() 
-    {
-        Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
-        // 3. 레이를 발사한다.
-        // 4. 레이가 부딪힌 대상의 정보를 받아온다.
-        RaycastHit hitInfo;
-        bool IsHit = Physics.Raycast(ray, out hitInfo);
-        iHitalbe hitObject = hitInfo.collider.GetComponent<iHitalbe>();
-        if (hitObject != null) // 때릴 수 있는 친구인가?
-        {
-            hitObject.Hit(CurrentGun.damage);
-        }
-
-        CurrentGun._bulletCount--;
-        CurrentGun._bulletCount = Mathf.Max(0, CurrentGun._bulletCount);
-        // 5. 부딪힌 위치에 (총알이 튀는) 이펙트를 위치한다. 
-        HitEffect.gameObject.transform.position = hitInfo.point;
-        // 6. 이펙트가 쳐다보는 방향을 부딪힌 위치의 법선 벡터로 한다.
-        HitEffect.gameObject.transform.forward = hitInfo.normal;
-        HitEffect.Play(); // 쏠때마다 계속 재생될수 있도록 play를 달아줌
-    }
+ 
 
     void BulletUI()
     {
         bulletText.text = $"Bullet {CurrentGun._bulletCount:d2}/{CurrentGun._bulletMax}";
     }
-    public void Hit(int damage)
+    public void Hit(DamageInfo damageInfo)
     {
-        Health -= damage;
+        Health -= damageInfo.Amount;
         if (Health <= 0)
         {
             Destroy(gameObject);

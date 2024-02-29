@@ -544,6 +544,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4174067157931348, guid: ea40e7eda5f0ffe4e9d8f3c4239406a8, type: 3}
   m_PrefabInstance: {fileID: 1633734563}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &101495036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 101495037}
+  - component: {fileID: 101495038}
+  m_Layer: 0
+  m_Name: BloodFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &101495037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101495036}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.8800006, y: 1.5250002, z: 1.6378987}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 931875170}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &101495038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101495036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 148f941bfcaca80458d7e7d376b126b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BloodPostb: {fileID: 1000013355911406, guid: d32aa916f50cac94db11e6f19821a58f, type: 3}
+  BloodCount: 3
 --- !u!1001 &112542488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6984,6 +7030,7 @@ Transform:
   - {fileID: 800820387}
   - {fileID: 711724656}
   - {fileID: 182395337}
+  - {fileID: 101495037}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &932281186

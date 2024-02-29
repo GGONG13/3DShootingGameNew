@@ -27,10 +27,10 @@ public class Drum : MonoBehaviour, iHitalbe
     }   
 
 
-    public void Hit(int damage)
+    public void Hit(DamageInfo damageInfo)
     {
         if (hasExploded) return;
-        Health -= damage;
+        Health -= damageInfo.Amount;
 
         drumAction();
 
@@ -53,9 +53,10 @@ public class Drum : MonoBehaviour, iHitalbe
             {
                 iHitalbe hitalbe = collider.GetComponent<iHitalbe>();
                 int damage = 70;
+                DamageInfo damageInfo = new DamageInfo(DamageType.Normal, damage);
                 if (hitalbe != null)
                 {
-                    hitalbe.Hit(damage);
+                    hitalbe.Hit(damageInfo);
                 }
             }
             Collider[] drumcollider = Physics.OverlapSphere(transform.position, explosionRange, LayerMask.GetMask("drum"));
@@ -63,9 +64,10 @@ public class Drum : MonoBehaviour, iHitalbe
             {
                 iHitalbe iHitalbe = col.GetComponent<iHitalbe>();
                 int Damage = 10;
+                DamageInfo damageInfo = new DamageInfo(DamageType.Normal, Damage);
                 if (iHitalbe != null)
                 {
-                    iHitalbe.Hit(Damage);
+                    iHitalbe.Hit(damageInfo);
                 }
             }
 

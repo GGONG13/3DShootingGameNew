@@ -185,7 +185,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
         {
             if (_yVelocity < -10)
             {
-                Hit(10 * (int)(_yVelocity / 10f));
+                DamageInfo damage = new DamageInfo(DamageType.Normal, 10 * (int)(_yVelocity / 10f));
             }
 
             PlayerHealthUI();
@@ -209,10 +209,10 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
 
 
     }
-    public void Hit(int damage)
+    public void Hit(DamageInfo damageInfo)
     {
 
-        Health -= damage;
+        Health -= damageInfo.Amount;
         _animator.SetLayerWeight(-1, Health / (float)MaxHealth);
         StartCoroutine(HitEffect_Coroutine(0.3f));
         CameraManager.Instance.CameraShake.Shake();

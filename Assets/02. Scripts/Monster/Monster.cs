@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using static DamageInfo;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public enum MonsterState // 몬스터의 상태
@@ -63,6 +64,8 @@ public class Monster : MonoBehaviour, iHitalbe
     private const float IDLE_DURATION = 3;
     float _progress;
     private bool _isMoving = true;
+
+    public GameObject BloodPrab;
 
     void Start()
     {        
@@ -177,7 +180,7 @@ public class Monster : MonoBehaviour, iHitalbe
             _animator.SetTrigger("AttacToTrace");
         }
 
-        if (_timer >= _attackTimer && Vector3.Distance(Target.position, transform.position) < 10f)
+        if (_timer >= _attackTimer && Vector3.Distance(Target.position, transform.position) > 10f)
         {
             PlayerAttack();
         }
@@ -190,10 +193,10 @@ public class Monster : MonoBehaviour, iHitalbe
         if (iHitalbe != null)
         {
             Debug.Log("때렸다!");
+            DamageInfo damageInfo = new DamageInfo(DamageType.Normal, damage);
             _animator.SetTrigger("Attack");
-            iHitalbe.Hit(damage);
+            iHitalbe.Hit(damageInfo);
             _timer = 0;
-
         }
     }
 
@@ -279,9 +282,15 @@ public class Monster : MonoBehaviour, iHitalbe
         }
     }
 
-    public void Hit(int damage)
+    public void Hit(DamageInfo damage)
     {
-        Health -= damage;
+
+        if (damage.DamageType == DamageType.Cirtical)
+        {
+            // 블러드를 팩토리 패턴으로 구현하기 
+             BloodFactory.Instance.Make(damage.Position, damage.Normal);
+        }
+        Health -= damage.Amount;
         Damaged();
         monsterUI();
         if (Health <= 0)
