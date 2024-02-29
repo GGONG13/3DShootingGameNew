@@ -14,7 +14,8 @@ public class UI_ItemIventory : MonoBehaviour
     {
         Refresh();
 
-        ItemManager.Instance.Mulity(Refresh);
+        ItemManager.Instance.OnDataChanged = Refresh;
+      //  ItemManager.Instance.Mulity(Refresh);
     }
     public void Refresh()
     {

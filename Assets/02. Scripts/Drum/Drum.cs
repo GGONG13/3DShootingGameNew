@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.Purchasing;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,6 +14,17 @@ public class Drum : MonoBehaviour, iHitalbe
     private int explosionRange = 5;
     private bool hasExploded = false;
 
+    public List<Texture2D> DrumMaterial;
+    void Start()
+    {
+ 
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+        int random = UnityEngine.Random.Range(0, DrumMaterial.Count);
+        foreach (var drum in DrumMaterial)
+        {
+            mr.material.SetTexture("_MainTex", DrumMaterial[random]);
+        }
+    }   
 
 
     public void Hit(int damage)

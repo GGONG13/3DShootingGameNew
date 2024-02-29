@@ -177,7 +177,7 @@ public class Monster : MonoBehaviour, iHitalbe
             _animator.SetTrigger("AttacToTrace");
         }
 
-        if (_timer >= _attackTimer)
+        if (_timer >= _attackTimer && Vector3.Distance(Target.position, transform.position) < 10f)
         {
             PlayerAttack();
         }

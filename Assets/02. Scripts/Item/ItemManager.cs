@@ -19,7 +19,7 @@ public class ItemManager : MonoBehaviour
     {
         if (OnDataChanged != null)
         {
-            OnDataChanged += action;
+            OnDataChanged = action;
         }
     }
 
@@ -67,6 +67,7 @@ public class ItemManager : MonoBehaviour
             if (ItemList[i].ItemType == itemType) 
             {
                 ItemList[i].Count++;
+                OnDataChanged.Invoke();
                 break;
             }
         }
