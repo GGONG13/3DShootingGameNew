@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UI_OptionPopUp : MonoBehaviour
 {
@@ -31,6 +32,11 @@ public class UI_OptionPopUp : MonoBehaviour
     public void OnReplayButtonClicked() 
     {
         Debug.Log("다시하기 버튼을 클릭했습니다.");
+        // 항상 열려 있는 씬을 항상 로드하겠다는 인덱스 뜻
+        int CurrentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        // 씬매니저야 ()번 씬을 로드하렴
+        SceneManager.LoadScene(0); // 메인 씬은 0번부터 시작함
+        GameManager.Instance.Continue();
     }
     public void OnGameOverButtonClicked()
     {
