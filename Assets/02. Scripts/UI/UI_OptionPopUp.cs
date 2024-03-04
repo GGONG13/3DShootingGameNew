@@ -35,7 +35,14 @@ public class UI_OptionPopUp : MonoBehaviour
     public void OnGameOverButtonClicked()
     {
         Debug.Log("게임종료 버튼을 클릭했습니다.");
-        Close ();
-        GameManager.Instance.GameOver();
+        // 빌드 후 실행 했을 경우 종료하는 방법
+        Application.Quit();
+
+        // GameManager.Instance.GameOver();
+
+#if UNITY_EDITOR
+        // 유니티 에디터에서 실행햇을 경우 종료하는 방법
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }
