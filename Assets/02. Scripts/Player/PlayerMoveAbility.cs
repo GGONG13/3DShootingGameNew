@@ -211,7 +211,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
     }
     public void Hit(DamageInfo damageInfo)
     {
-
+        
         Health -= damageInfo.Amount;
         _animator.SetLayerWeight(-1, Health / (float)MaxHealth);
         StartCoroutine(HitEffect_Coroutine(0.3f));
@@ -220,6 +220,7 @@ public class PlayerMoveAbility : MonoBehaviour, iHitalbe
         {
             GameManager.Instance.GameOver();
             HitEffectImageUI.enabled = true;
+            HitEffectImageUI.gameObject.SetActive(false);
             gameObject.SetActive(false);
         }
     }

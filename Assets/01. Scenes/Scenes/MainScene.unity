@@ -8215,8 +8215,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1389421940}
-        m_TargetAssemblyTypeName: UI_GameOverOption, Assembly-CSharp
+      - m_Target: {fileID: 1030580085}
+        m_TargetAssemblyTypeName: UI_OptionPopUp, Assembly-CSharp
         m_MethodName: OnGameOverButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -22591,8 +22591,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1389421940}
-        m_TargetAssemblyTypeName: UI_GameOverOption, Assembly-CSharp
+      - m_Target: {fileID: 1030580085}
+        m_TargetAssemblyTypeName: UI_OptionPopUp, Assembly-CSharp
         m_MethodName: OnReplayButtonClicked
         m_Mode: 1
         m_Arguments:

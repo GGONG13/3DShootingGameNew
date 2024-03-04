@@ -19,7 +19,7 @@ public class UI_GameOverOption : MonoBehaviour
         // 항상 열려 있는 씬을 항상 로드하겠다는 인덱스 뜻
         int CurrentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         // 씬매니저야 ()번 씬을 로드하렴
-        SceneManager.LoadScene(0); // 메인 씬은 0번부터 시작함
+        SceneManager.LoadScene(1); // 메인 씬은 0번부터 시작함
         GameManager.Instance.Continue();
     }
 
