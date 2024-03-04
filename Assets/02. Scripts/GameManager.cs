@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public UI_OptionPopUp Image;
+    public UI_GameOverOption overOption;
 
     private void Awake()
     {
@@ -63,6 +64,11 @@ public class GameManager : MonoBehaviour
         Image.Open();
         Pause();
         Debug.Log("옵션 버튼을 클릭했습니다.");
+
+        if (State == GameState.Over)
+        {
+            return;
+        }
     }
 
 
@@ -88,6 +94,7 @@ public class GameManager : MonoBehaviour
         State = GameState.Over;
         StateTextUI.gameObject.SetActive(true);
         Refresh();
+        overOption.gameObject.SetActive(true);
     }
     public void Refresh()
     {
